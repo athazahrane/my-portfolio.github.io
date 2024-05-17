@@ -10,8 +10,8 @@ window.addEventListener('scroll', function () {
 
     if (scrollTop > referenceScroll) {
         navbar.classList.add('scrolled');
-        navbar.style.position = 'fixed'; // Mengubah posisi menjadi fixed
-        navbar.style.top = '0'; // Mengatur navbar di bagian atas layar
+        navbar.style.position = 'fixed';
+        navbar.style.top = '0';
         imageNav.style.opacity = '0';
         imageNav.style.transform = 'translateY(-100px)';
         imageNav.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -20,8 +20,8 @@ window.addEventListener('scroll', function () {
         pNav.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
     } else {
         navbar.classList.remove('scrolled');
-        navbar.style.position = 'sticky'; // Mengembalikan posisi ke sticky
-        navbar.style.top = '0'; // Tetap di bagian atas layar
+        navbar.style.position = 'sticky';
+        navbar.style.top = '0';
         imageNav.style.opacity = '1';
         imageNav.style.transform = 'translateY(0px)';
         imageNav.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -59,7 +59,7 @@ window.onscroll = () => {
 
         if (top >= offset && top < offset + height) {
             sec.classList.add('show-animate');
-            
+
             let valuesInSection = sec.querySelectorAll('.value');
             valuesInSection.forEach((val, idx) => {
                 val.style.width = val.dataset.width;
@@ -78,7 +78,7 @@ window.onscroll = () => {
 
 
 // btn scrollTop
-function btnScrollShow () {
+function btnScrollShow() {
     const btnScrollTop = document.getElementById('btnScrollTop')
 
     window.addEventListener('scroll', () => {
@@ -146,4 +146,46 @@ tabs.forEach((tab, tabIndex) => {
             }
         });
     });
+});
+
+
+// close alert 
+const btnClose = document.querySelector('.close')
+
+btnClose.addEventListener('click', () => {
+    document.querySelector('.alert').style.display = 'none'
+})
+
+// contact form to spreadsheets
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwUn-Vluk1WrLXYVEpuQ509H3_04kWpjBXpg25p9x1MtIB391bNHZpYHr7IGflXc0Mt/exec';
+const form = document.forms['my-portfolio-contact-form'];
+
+form.addEventListener('submit', e => {
+
+    const formData = new FormData(form);
+
+    const btnSubmit = document.querySelector('.submit')
+    const btnLoading = document.querySelector('.loading')
+    const alert = document.querySelector('.alert')
+
+    e.preventDefault();
+    
+    btnLoading.classList.toggle('active')
+    btnSubmit.classList.toggle('active')
+
+    fetch(scriptURL, { method: 'POST', body: formData })
+        .then(response => {
+
+            btnLoading.classList.toggle('active')
+            btnSubmit.classList.toggle('active')
+            alert.classList.toggle('active')
+
+            // form reset
+            form.reset()
+
+            console.log('Success!', response)
+        })
+        .catch(error => {
+            console.error('Error!', error.message)
+        });
 });
